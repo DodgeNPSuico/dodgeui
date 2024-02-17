@@ -37,10 +37,8 @@ function App() {
   };
 
   useEffect(() => {
-    if (onSuccessfulSave) {
-      fetchExpenses();
-    }
-  }, [onSuccessfulSave]);
+    fetchExpenses();
+  }, []);
 
   const saveExpense = async (event) => {
     event.preventDefault();
@@ -66,25 +64,18 @@ function App() {
     setOnSuccessfulSave(true);
   };
 
+  useEffect(()=>{
+        if(onSuccessfulSave){
+          fetchExpenses();
+        }
+      },[onSuccessfulSave])
+
   return (
     <div>
       <form onSubmit={saveExpense}>
-        <textarea
-          cols="30"
-          rows="10"
-          value={description}
-          onChange={(event) => setDescription(event.target.value)}
-        ></textarea>
-        <input
-          type="number"
-          value={amount}
-          onChange={(event) => setAmount(event.target.value)}
-        />
-        <input
-          type="date"
-          value={date}
-          onChange={(event) => setDate(event.target.value)}
-        />
+        <textarea cols="30" rows="10" value={description} onChange={(event) => setDescription(event.target.value)}></textarea>
+        <input type="number" value={amount} onChange={(event) => setAmount(event.target.value)} />
+        <input type="date" value={date} onChange={(event) => setDate(event.target.value)} />
         <button>Save</button>
       </form>
 
