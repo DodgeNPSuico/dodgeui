@@ -1,23 +1,28 @@
 import { useEffect, useState } from "react";
 
- function renderExpenses(expenses) {
-   const rows = expenses.map((expense) => {
-     return (
-       <tr key={expense._id}>
-         <td>{expense._id}</td>
-         <td>{expense.description}</td>
-         <td>{expense.amount}</td>
-         <td>{new Date(expense.date).toDateString()}</td>
-       </tr>
-     );
-   });
+function renderExpenses(expenses) {
+  const rows = expenses.map((expense) => {
+    return (
+      <tr key={expense._id}>
+        <td>{expense._id}</td>
+        <td>{expense.description}</td>
+        <td>{expense.amount}</td>
+        <td>{new Date(expense.date).toDateString()}</td>
+      </tr>
+    );
+  });
 
-   return rows;
- }
-  
+  return rows;
+}
 
 function App() {
   const [expenses, setExpenses] = useState([]);
+  const [description, setDescription] = useState("");
+  const [amount, setAmount] = useState(0);
+  const [date, setDate] = useState(
+    new Date(Date.now()).toLocaleDateString("en-CA")
+  );
+  const [onSuccessfulSave, setOnSuccessfulSave] = useState(false);
 
   const fetchExpenses = async () => {
     const apiUrl = "https://workshop-expense-api.onrender.com";
@@ -32,15 +37,54 @@ function App() {
   };
 
   useEffect(() => {
-    fetchExpenses();
-  }, []);
+    if (onSuccessfulSave) {
+      fetchExpenses();
+    }
+  }, [onSuccessfulSave]);
+
+  const saveExpense = async (event) => {
+    event.preventDefault();
+
+    const apiUrl = "http://localhost:1234";
+
+    const endpoint = `${apiUrl}/api/expenses`;
+
+    const expense = {
+      description: description,
+      amount: amount,
+      date: date,
+    };
+
+    await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(expense),
+    });
+
+    setOnSuccessfulSave(true);
+  };
 
   return (
     <div>
-      <form>
-        <textarea cols="30" rows="10"></textarea>
-        <input type="number" />
-        <input type="date" />
+      <form onSubmit={saveExpense}>
+        <textarea
+          cols="30"
+          rows="10"
+          value={description}
+          onChange={(event) => setDescription(event.target.value)}
+        ></textarea>
+        <input
+          type="number"
+          value={amount}
+          onChange={(event) => setAmount(event.target.value)}
+        />
+        <input
+          type="date"
+          value={date}
+          onChange={(event) => setDate(event.target.value)}
+        />
         <button>Save</button>
       </form>
 
@@ -56,9 +100,7 @@ function App() {
           </tr>
         </thead>
 
-        <tbody>
-        {renderExpenses(expenses)}
-        </tbody>
+        <tbody>{renderExpenses(expenses)}</tbody>
       </table>
     </div>
   );
