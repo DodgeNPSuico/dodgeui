@@ -20,7 +20,7 @@ function App() {
   const [expenses, setExpenses] = useState([]);
 
   const fetchExpenses = async () => {
-    const apiUrl = "http://localhost:1234";
+    const apiUrl = "https://workshop-expense-api.onrender.com";
 
     const endpoint = `${apiUrl}/api/expenses`;
 
