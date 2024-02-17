@@ -1,4 +1,24 @@
+import { useEffect, useState } from "react";
+
 function App() {
+  const [expenses, setExpenses] = useState([]);
+
+  const fetchExpenses = async () => {
+    const apiUrl = "http://localhost:1234";
+
+    const endpoint = `${apiUrl}/api/expenses`;
+
+    const response = await fetch(endpoint);
+
+    const expenseData = await response.json();
+
+    setExpenses(expenseData);
+  };
+
+  useEffect(() => {
+    fetchExpenses();
+  }, []);
+
   return (
     <div>
       <form>
@@ -20,8 +40,7 @@ function App() {
           </tr>
         </thead>
 
-        <tbody>
-        </tbody>
+        <tbody></tbody>
       </table>
     </div>
   );
