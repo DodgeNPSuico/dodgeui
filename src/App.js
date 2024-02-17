@@ -1,5 +1,21 @@
 import { useEffect, useState } from "react";
 
+ function renderExpenses(expenses) {
+   const rows = expenses.map((expense) => {
+     return (
+       <tr key={expense._id}>
+         <td>{expense._id}</td>
+         <td>{expense.description}</td>
+         <td>{expense.amount}</td>
+         <td>{new Date(expense.date).toDateString()}</td>
+       </tr>
+     );
+   });
+
+   return rows;
+ }
+  
+
 function App() {
   const [expenses, setExpenses] = useState([]);
 
@@ -40,7 +56,9 @@ function App() {
           </tr>
         </thead>
 
-        <tbody></tbody>
+        <tbody>
+        {renderExpenses(expenses)}
+        </tbody>
       </table>
     </div>
   );
