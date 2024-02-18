@@ -25,7 +25,7 @@ function App() {
   const [onSuccessfulSave, setOnSuccessfulSave] = useState(false);
 
   const fetchExpenses = async () => {
-    const apiUrl = process.env.REACT_APP_API_URL;
+    const apiUrl = "https://workshop-expense-api.onrender.com";
 
     const endpoint = `${apiUrl}/api/expenses`;
 
